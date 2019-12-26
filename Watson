@@ -1,0 +1,276 @@
+{
+  "intents": [],
+  "entities": [
+    {
+      "entity": "sys-date",
+      "values": [],
+      "fuzzy_match": true
+    },
+    {
+      "entity": "consulta",
+      "values": [
+        {
+          "type": "synonyms",
+          "value": "Consulta",
+          "synonyms": [
+            "consulta, Consulta, $consulta"
+          ]
+        }
+      ],
+      "fuzzy_match": true
+    },
+    {
+      "entity": "sys-time",
+      "values": [],
+      "fuzzy_match": true
+    },
+    {
+      "entity": "estetica",
+      "values": [
+        {
+          "type": "synonyms",
+          "value": "Estética",
+          "synonyms": [
+            "estética, Estética, $estetica"
+          ]
+        }
+      ],
+      "fuzzy_match": true
+    }
+  ],
+  "metadata": {
+    "api_version": {
+      "major_version": "v2",
+      "minor_version": "2018-11-08"
+    }
+  },
+  "webhooks": [
+    {
+      "url": "",
+      "name": "main_webhook",
+      "headers": []
+    }
+  ],
+  "dialog_nodes": [
+    {
+      "type": "response_condition",
+      "output": {
+        "text": {
+          "values": [
+            "Por supuesto! Necesitaremos los siguientes datos de su mascota par poder recibirlo- Nombre de su mascota- Nombre del dueño- Edad de su mascota- Sexo de su mascota- Horario de ingreso (Recuerde que nuestro horarios para estética son de 9:00 a.m.  a  16:00 p.m.)- Qué le desea hacer (baño, corte, o ambos)"
+          ],
+          "selection_policy": "sequential"
+        }
+      },
+      "parent": "node_7_1577378037933",
+      "conditions": "$estetica",
+      "dialog_node": "response_9_1577384231384"
+    },
+    {
+      "type": "standard",
+      "title": "Cita estética",
+      "parent": "Bienvenido",
+      "metadata": {
+        "_customization": {
+          "mcr": true
+        }
+      },
+      "conditions": "@estetica",
+      "dialog_node": "node_7_1577378037933",
+      "previous_sibling": "response_9_1577381716118"
+    },
+    {
+      "type": "standard",
+      "title": "Consulta Médica",
+      "parent": "Bienvenido",
+      "metadata": {
+        "_customization": {
+          "mcr": true
+        }
+      },
+      "conditions": "@consulta",
+      "dialog_node": "node_4_1577379624686",
+      "previous_sibling": "node_7_1577378037933"
+    },
+    {
+      "type": "response_condition",
+      "output": {
+        "generic": [
+          {
+            "title": "",
+            "options": [
+              {
+                "label": "Cita Estética",
+                "value": {
+                  "input": {
+                    "text": "$estetica"
+                  }
+                }
+              }
+            ],
+            "response_type": "option"
+          }
+        ]
+      },
+      "parent": "Bienvenido",
+      "disabled": true,
+      "conditions": "$estetica",
+      "dialog_node": "response_9_1577381716118",
+      "previous_sibling": "response_10_1577381692071"
+    },
+    {
+      "type": "response_condition",
+      "output": {
+        "generic": [
+          {
+            "title": "",
+            "options": [
+              {
+                "label": "Consulta Médica",
+                "value": {
+                  "input": {
+                    "text": "$consulta"
+                  }
+                }
+              }
+            ],
+            "response_type": "option"
+          }
+        ]
+      },
+      "parent": "Bienvenido",
+      "disabled": true,
+      "conditions": "$consulta",
+      "dialog_node": "response_10_1577381692071"
+    },
+    {
+      "type": "response_condition",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Por supuesto! Necesitaremos los siguientes datos de su mascota par poder recibirlo- Nombre de su mascota- Nombre del dueño- Edad de su mascota- Sexo de su mascota- Horario de ingreso (Recuerde que nuestro horarios para consulta son de 8:00 a.m.  a  22:00 p.m.)- Qué tiene su mascota?! (síntomas)"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_4_1577379624686",
+      "conditions": "$consulta",
+      "dialog_node": "response_6_1577381827378",
+      "previous_sibling": "slot_5_1577382849265"
+    },
+    {
+      "type": "slot",
+      "parent": "node_4_1577379624686",
+      "dialog_node": "slot_5_1577382849265"
+    },
+    {
+      "type": "event_handler",
+      "output": {},
+      "parent": "slot_5_1577382849265",
+      "event_name": "focus",
+      "dialog_node": "handler_10_1577382849301",
+      "previous_sibling": "handler_10_1577382849300"
+    },
+    {
+      "type": "event_handler",
+      "parent": "slot_5_1577382849265",
+      "event_name": "input",
+      "dialog_node": "handler_10_1577382849300"
+    },
+    {
+      "type": "standard",
+      "title": "En otras cosas",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "No le he entendido. Intente reformular la consulta."
+              },
+              {
+                "text": "¿Puede expresarse con otras palabras? No le he entendido."
+              },
+              {
+                "text": "No entendí el significado."
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "conditions": "anything_else",
+      "dialog_node": "En otras cosas",
+      "previous_sibling": "Bienvenido",
+      "disambiguation_opt_out": true
+    },
+    {
+      "type": "standard",
+      "title": "Bienvenido",
+      "output": {
+        "generic": [
+          {
+            "title": "Hola, en que te podemos ayudar",
+            "options": [
+              {
+                "label": "Consulta Médica",
+                "value": {
+                  "input": {
+                    "text": "$consulta"
+                  }
+                }
+              },
+              {
+                "label": "Cita para Estética",
+                "value": {
+                  "input": {
+                    "text": "$estetica"
+                  }
+                }
+              }
+            ],
+            "response_type": "option"
+          },
+          {
+            "values": [
+              {
+                "text": "Lea bien las indicaciones para que el ingreso de su mascota no tenga contratiempos y podamos brindarle un mejor servicio."
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "metadata": {
+        "_customization": {
+          "mcr": false
+        }
+      },
+      "conditions": "welcome",
+      "dialog_node": "Bienvenido"
+    }
+  ],
+  "counterexamples": [],
+  "system_settings": {
+    "disambiguation": {
+      "prompt": "Did you mean:",
+      "enabled": true,
+      "randomize": true,
+      "max_suggestions": 5,
+      "suggestion_text_policy": "title"
+    },
+    "human_agent_assist": {
+      "prompt": "Querías decir:"
+    }
+  },
+  "learning_opt_out": false,
+  "name": "Veterinaria",
+  "language": "es",
+  "description": ""
+}
